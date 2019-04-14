@@ -11,7 +11,7 @@
 
     <title>
         
-        Hello World - 陈应钦的博客 | ChenYingqin&#39;s Blog
+        SSL协议原理 - 陈应钦的博客 | ChenYingqin&#39;s Blog
         
     </title>
 
@@ -89,7 +89,7 @@
     </div>
     
         <div id="toc" class="toc-article">
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ssl协议原理"><span class="toc-text">ssl协议原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#密码学基础"><span class="toc-text">密码学基础</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ssl握手过程"><span class="toc-text">ssl握手过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数字签名生成过程"><span class="toc-text">数字签名生成过程:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#客户端校验数字证书过程："><span class="toc-text">客户端校验数字证书过程：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为何ssl握手过程需要前两个没有加密的随机数？"><span class="toc-text">为何ssl握手过程需要前两个没有加密的随机数？</span></a></li></ol></li></ol></li></ol>
 </div>
     
 </div>
@@ -119,11 +119,11 @@
 
 <div class="post-container">
     <div class="post-title">
-        Hello World
+        SSL协议原理
     </div>
 
     <div class="post-meta">
-        <span class="attr">发布于：<span>2019-01-22 22:41:42</span></span>
+        <span class="attr">发布于：<span>2019-04-14 23:38:25</span></span>
         
         
         <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
@@ -131,15 +131,22 @@
 
     </div>
     <div class="post-content ">
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <h1 id="ssl协议原理"><a href="#ssl协议原理" class="headerlink" title="ssl协议原理"></a>ssl协议原理</h1><h2 id="密码学基础"><a href="#密码学基础" class="headerlink" title="密码学基础"></a>密码学基础</h2><p>对称加密：加密、解密使用同一密钥，常见的有DES、AES加密算法，这种类型的加密算法加解密速度快，效率高。<br>非对称加密：加密、解密使用两个密钥即公钥和私钥，被公钥加密的数据用私钥解密，被私钥加密的数据用公钥解密。常见的有RSA、ECC(椭圆加密算法)。公钥一般是公开的，非对称加密不需要像对称密钥那样传输密钥，安全性大了很多。非对称加密算法速度慢，效率比较低。</p>
+<h2 id="ssl握手过程"><a href="#ssl握手过程" class="headerlink" title="ssl握手过程"></a>ssl握手过程</h2><ol>
+<li>客户端向服务端发送消息，告诉服务端自己支持的ssl协议版本、加密算法，一个随机数A</li>
+<li>服务端收到客户端发送的消息后，确认双方的加密算法，服务器也会生成一个随机数B，并将确认的加密算法、随机数B返回给客户端。</li>
+<li>服务端发送数字证书到客户端</li>
+<li>客户端收到服务端的数字证书后，对它进行校验。</li>
+<li>客户端生成一串随机数C（pre-master-secret），并用数字证书中提供的网站公钥对它进行加密。</li>
+<li>服务端使用自己的私钥对随机数C进行解密</li>
+<li>客户端、服务端利用随机数A、B、C并根据约定的算法生成会话密钥。之后两者的会话就是用该密钥进行加解密。</li>
+<li>客户端使用约定好的哈希算法计算握手消息，并使用会话密钥进行加密，将握手消息、握手消息hash值发给服务端；服务端使用会话密钥解密客户端发来的消息并验证hash值是否与客户端发来的一致。验证通过后，服务端同样使用会话密钥向客户端发送握手消息，客户端解密握手消息并验证hash值是否与服务端发来的一致。验证通过后，握手结束。这里客户端和服务端互相发送加密的握手消息并验证，目的是为了双方获得了一致的会话密钥，并能够正常的进行加解密。为后续真正的数据传输做了一次测试。</li>
+</ol>
+<hr>
+<p><img src="../img/sslHandShakeProcess.png" alt="SSL握手过程"></p>
+<h3 id="数字签名生成过程"><a href="#数字签名生成过程" class="headerlink" title="数字签名生成过程:"></a>数字签名生成过程:</h3><p>服务端对消息（网站信息包括证书使用的HASH签名算法，证书发行机构，证书公钥等）使用HASH算法得到消息摘要；<br>服务端使用第三方机构私钥对消息摘要进行加密（为什么不直接对消息进行加密而对消息摘要进行加密，因为非对称加密非常耗时）；<br>加密后的消息摘要就是数字签名。<br>网站信息和数字签名就构成了数字证书。</p>
+<h3 id="客户端校验数字证书过程："><a href="#客户端校验数字证书过程：" class="headerlink" title="客户端校验数字证书过程："></a>客户端校验数字证书过程：</h3><p>客户端使用第三方机构公钥对数字签名进行解密得到消息摘要；<br>客户端根据证书的签名算法对网站信息进行加密后得到的值与消息摘要进行比较，如果一致则证书校验成功。</p>
+<h3 id="为何ssl握手过程需要前两个没有加密的随机数？"><a href="#为何ssl握手过程需要前两个没有加密的随机数？" class="headerlink" title="为何ssl握手过程需要前两个没有加密的随机数？"></a>为何ssl握手过程需要前两个没有加密的随机数？</h3><p>保证ssl握手过程不可逆，安全性要求；而不是防止伪随机数。<br><strong>ssl协议处在TCP/IP五层网络模型传输层和应用层之间。</strong></p>
 
         
         <br>
